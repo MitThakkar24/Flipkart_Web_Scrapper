@@ -23,7 +23,7 @@ def homePage():
 def index():
     if request.method == 'POST':
         try:
-            DRIVER_PATH = r"chromedriver.exe"
+            DRIVER_PATH = r"ChromeDriver/chromedriver.exe"
 
             # Initialize the Chrome WebDriver
             service = webdriver.ChromeService(executable_path =DRIVER_PATH)
