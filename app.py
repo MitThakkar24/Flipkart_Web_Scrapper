@@ -23,7 +23,7 @@ def homePage():
 def index():
     if request.method == 'POST':
         try:
-            os.system('''chmod 755 "chromedriver.exe"''')
+            #os.system('''chmod 755 "chromedriver.exe"''')
             DRIVER_PATH = r"chromedriver.exe"
 
             # Initialize the Chrome WebDriver
