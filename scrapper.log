@@ -5457,3 +5457,26 @@ INFO:root:log my final result [{'Product': 'mi11x', 'Name': 'Jay kishan sahu', '
 INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:12:20] "POST /review HTTP/1.1" 200 -
 INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:12:20] "[33mGET /style.css HTTP/1.1[0m" 404 -
 INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:12:20] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5000
+ * Running on http://192.168.1.9:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-081-666
+INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:32:31] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:32:31] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:32:31] "[36mGET /static/css/main.css HTTP/1.1[0m" 304 -
+INFO:root:name
+INFO:root:rating
+INFO:root:No Comment Heading
+INFO:root:'NoneType' object has no attribute 'div'
+INFO:root:log my final result [{'Product': 'scrapper', 'Name': 'Saji Balakrishnan', 'Rating': '3', 'CommentHead': 'Does the job', 'Comment': 'Ok'}, {'Product': 'scrapper', 'Name': 'Mohamed  Jiyavudeen', 'Rating': '4', 'CommentHead': 'Good choice', 'Comment': 'Very useful for home bakers'}, {'Product': 'scrapper', 'Name': 'Flipkart Customer', 'Rating': '5', 'CommentHead': 'Highly recommended', 'Comment': 'Good \U0001f44d\U0001f3fb'}, {'Product': 'scrapper', 'Name': 'Flipkart Customer', 'Rating': '5', 'CommentHead': 'Super!', 'Comment': 'Good'}, {'Product': 'scrapper', 'Name': 'Flipkart Customer', 'Rating': '3', 'CommentHead': 'Nice', 'Comment': 'It was too hard'}, {'Product': 'scrapper', 'Name': 'Flipkart Customer', 'Rating': '5', 'CommentHead': 'Brilliant', 'Comment': 'So Good \U0001f44d\U0001f60a'}, {'Product': 'scrapper', 'Name': 'Flipkart Customer', 'Rating': '5', 'CommentHead': 'Perfect product!', 'Comment': 'Excellent'}, {'Product': 'scrapper', 'Name': 'mubarak ansari', 'Rating': '5', 'CommentHead': 'Must buy!', 'Comment': 'Solid ..ek no ..I like that .. thanku \U0001f60a\U0001f60a\U0001f60a'}, {'Product': 'scrapper', 'Name': 'Subrata Sarkar', 'Rating': '5', 'CommentHead': 'Classy product', 'Comment': 'Very good qualityI am very happy \U0001f60aThankyou Flipkart for your good quality'}, {'Product': 'scrapper', 'Name': 'Avinash  Kumawat', 'Rating': '5', 'CommentHead': 'Terrific purchase', 'Comment': 'Best products'}, {'Product': 'scrapper', 'Name': 'Avinash  Kumawat', 'Rating': 'No Rating', 'CommentHead': 'No Comment Heading', 'Comment': 'Best products'}]
+INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:32:36] "POST /review HTTP/1.1" 200 -
+INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:32:36] "[33mGET /style.css HTTP/1.1[0m" 404 -
+INFO:werkzeug:192.168.1.9 - - [19/Jan/2024 22:32:36] "[36mGET /static/css/style.css HTTP/1.1[0m" 304 -
+INFO:werkzeug: * Detected change in 'c:\\Users\\Asus\\OneDrive\\GitHub\\PW_Data_Science_Masters\\Week 07 Python Project Web & Image Scrapper\\review-scrapper-aws-main-main\\app.py', reloading
+INFO:werkzeug: * Restarting with stat
+WARNING:werkzeug: * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 111-081-666

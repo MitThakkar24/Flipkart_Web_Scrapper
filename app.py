@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as uReq
 import logging
 import collections
+from pymongo.mongo_client import MongoClient
 collections.Callable = collections.abc.Callable
 logging.basicConfig(filename="scrapper.log" , level=logging.INFO)
 
@@ -74,6 +75,13 @@ def index():
                           "Comment": custComment}
                 reviews.append(mydict)
             logging.info("log my final result {}".format(reviews))
+
+            uri = "mongodb+srv://TMR:iTMR@cluster0.2egn1fr.mongodb.net/"
+            client = MongoClient(uri)
+            db = client['scrapper_col']
+            collection_scrapper = db['scrapper_record']
+            collection_scrapper.insert_many(reviews)
+
             return render_template('result.html', reviews=reviews[0:(len(reviews)-1)])
         except Exception as e:
             logging.info(e)
