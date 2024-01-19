@@ -3,108 +3,86 @@ from flask_cors import CORS,cross_origin
 import requests
 from bs4 import BeautifulSoup as bs
 from urllib.request import urlopen as uReq
-import pymongo
-import csv
-import os
-import time
-from selenium import webdriver 
-from selenium.webdriver.common.by import By # This needs to be used 
+import logging
+import collections
+collections.Callable = collections.abc.Callable
+logging.basicConfig(filename="scrapper.log" , level=logging.INFO)
 
-application = Flask(__name__) # initializing a flask app
-app=application
+app = Flask(__name__)
 
-@app.route('/',methods=['GET'])  # route to display the home page
-@cross_origin()
-def homePage():
+@app.route("/", methods = ['GET'])
+def homepage():
     return render_template("index.html")
 
-@app.route('/review',methods=['POST','GET']) # route to show the review comments in a web UI
-@cross_origin()
+@app.route("/review" , methods = ['POST' , 'GET'])
 def index():
     if request.method == 'POST':
         try:
-            #os.system('''chmod 755 "chromedriver.exe"''')
-            DRIVER_PATH = r"chromedriver.exe"
-
-            # Initialize the Chrome WebDriver
-            service = webdriver.ChromeService(executable_path =DRIVER_PATH)
-            driver = webdriver.Chrome(service=service)
             searchString = request.form['content'].replace(" ","")
             flipkart_url = "https://www.flipkart.com/search?q=" + searchString
-
-            driver.get(flipkart_url)
-            flipkartPage = driver.page_source
+            uClient = uReq(flipkart_url)
+            flipkartPage = uClient.read()
+            uClient.close()
             flipkart_html = bs(flipkartPage, "html.parser")
             bigboxes = flipkart_html.findAll("div", {"class": "_1AtVbE col-12-12"})
             del bigboxes[0:3]
             box = bigboxes[0]
             productLink = "https://www.flipkart.com" + box.div.div.div.a['href']
-            driver.get(productLink)
-            prodRes= driver.page_source
-            driver.quit()
-            prod_html = bs(prodRes, "html.parser")
+            prodRes = requests.get(productLink)
+            prodRes.encoding='utf-8'
+            prod_html = bs(prodRes.text, "html.parser")
+            print(prod_html)
             commentboxes = prod_html.find_all('div', {'class': "_16PBlm"})
 
             filename = searchString + ".csv"
-            with open(filename, "w", newline='', encoding='utf-8') as fw:
-                headers = ["Price","Product","Customer Name", "Rating","Heading","Comment"]
-                writer = csv.DictWriter(fw, fieldnames=headers)
-                writer.writeheader()
+            fw = open(filename, "w")
+            headers = "Product, Customer Name, Rating, Heading, Comment \n"
+            fw.write(headers)
+            reviews = []
+            for commentbox in commentboxes:
+                try:
+                    #name.encode(encoding='utf-8')
+                    name = commentbox.div.div.find_all('p', {'class': '_2sc7ZR _2V5EHH'})[0].text
 
-                reviews = []
-                for commentbox in commentboxes:
-                    try:
-                        price_element = flipkart_html.select('div._25b18c ._30jeq3')[0]
-                        price = price_element.text
-                    except:    
-                        price = 'There is no price'
-                    try:
-                        #name.encode(encoding='utf-8')
-                        name = commentbox.div.div.find_all('p', {'class': '_2sc7ZR _2V5EHH'})[0].text
+                except:
+                    logging.info("name")
 
-                    except:
-                        name = 'No Name'
-
-                    try:
-                        #rating.encode(encoding='utf-8')
-                        rating = commentbox.div.div.div.div.text
+                try:
+                    #rating.encode(encoding='utf-8')
+                    rating = commentbox.div.div.div.div.text
 
 
-                    except:
-                        rating = 'No Rating'
+                except:
+                    rating = 'No Rating'
+                    logging.info("rating")
 
-                    try:
-                        #commentHead.encode(encoding='utf-8')
-                        commentHead = commentbox.div.div.div.p.text
+                try:
+                    #commentHead.encode(encoding='utf-8')
+                    commentHead = commentbox.div.div.div.p.text
 
-                    except:
-                        commentHead = 'No Comment Heading'
-                    try:
-                        comtag = commentbox.div.div.find_all('div', {'class': ''})
-                        #custComment.encode(encoding='utf-8')
-                        custComment = comtag[0].div.text
-                    except Exception as e:
-                        print("Exception while creating dictionary: ",e)
+                except:
+                    commentHead = 'No Comment Heading'
+                    logging.info(commentHead)
+                try:
+                    comtag = commentbox.div.div.find_all('div', {'class': ''})
+                    #custComment.encode(encoding='utf-8')
+                    custComment = comtag[0].div.text
+                except Exception as e:
+                    logging.info(e)
 
-                    mydict = {"Price": price,"Product": searchString, "Customer Name": name, "Rating": rating, "Heading": commentHead,"Comment": custComment}
-                    reviews.append(mydict)
-                   
-                writer.writerows(reviews)
-
-               
-            client = pymongo.MongoClient("mongodb+srv://abc:abc@cluster0.lj6xm5o.mongodb.net/?retryWrites=true&w=majority")
-            db = client['flipkart_scrap']
-            review_col = db['review_scrap_data']
-            review_col.insert_many(reviews)
-            return render_template('results.html', reviews=reviews[0:(len(reviews)-1)])
+                mydict = {"Product": searchString, "Name": name, "Rating": rating, "CommentHead": commentHead,
+                          "Comment": custComment}
+                reviews.append(mydict)
+            logging.info("log my final result {}".format(reviews))
+            return render_template('result.html', reviews=reviews[0:(len(reviews)-1)])
         except Exception as e:
-            print('The Exception message is: ',e)
+            logging.info(e)
             return 'something is wrong'
     # return render_template('results.html')
 
     else:
         return render_template('index.html')
 
-if __name__ == "__main__":
-    app.run(host='127.0.0.1', port=8000, debug=True)
-	#app.run(debug=True)    
+
+if __name__=="__main__":
+    app.run(host="0.0.0.0",debug=True)
